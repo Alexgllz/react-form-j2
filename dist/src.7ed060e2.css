@@ -647,7 +647,14 @@ body, html {
 
 .leaflet-container {
   width: 100vw;
-  height: 100vh;
+  height: 50vh;
+}
+
+.info-container {
+  width: 100vw;
+  overflow: auto;
+  height: 50vh;
+  padding: 15px;
 }
 
 /*# sourceMappingURL=/src.7ed060e2.css.map */

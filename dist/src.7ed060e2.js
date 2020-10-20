@@ -47709,11 +47709,15 @@ var _reactLeaflet = require("react-leaflet");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CustomMap = function CustomMap(props) {
-  var allCountries = props.allCountries;
+  var allCountries = props.allCountries,
+      onCountryClick = props.onCountryClick;
 
   var ListMarkers = function ListMarkers() {
     return allCountries.map(function (country, index) {
       return country.latlng[0] ? /*#__PURE__*/_react.default.createElement(_reactLeaflet.Marker, {
+        onclick: function onclick() {
+          return onCountryClick(country);
+        },
         key: index,
         position: country.latlng
       }, /*#__PURE__*/_react.default.createElement(_reactLeaflet.Popup, null, country.name)) : null;
@@ -47733,7 +47737,34 @@ var CustomMap = function CustomMap(props) {
 };
 
 exports.CustomMap = CustomMap;
-},{"react":"../node_modules/react/index.js","./leafletConfig":"../src/CustomMap/leafletConfig.js","react-leaflet":"../node_modules/react-leaflet/es/index.js"}],"../src/Application.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./leafletConfig":"../src/CustomMap/leafletConfig.js","react-leaflet":"../node_modules/react-leaflet/es/index.js"}],"../src/Infos/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Infos = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Infos = function Infos(props) {
+  var CountryInfoList = function CountryInfoList() {
+    return props.currentCountry ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, Object.keys(props.currentCountry).map(function (name, index) {
+      return /*#__PURE__*/_react.default.createElement("div", {
+        key: index
+      }, name, ":", JSON.stringify(props.currentCountry[name]));
+    })) : null;
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "info-container"
+  }, /*#__PURE__*/_react.default.createElement(CountryInfoList, null));
+};
+
+exports.Infos = Infos;
+},{"react":"../node_modules/react/index.js"}],"../src/Application.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47746,6 +47777,8 @@ var _react = _interopRequireDefault(require("react"));
 var _httpServices = require("./http-services");
 
 var _CustomMap = require("./CustomMap");
+
+var _Infos = require("./Infos");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47771,6 +47804,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Application = /*#__PURE__*/function (_React$Component) {
   _inherits(Application, _React$Component);
 
@@ -47782,8 +47817,16 @@ var Application = /*#__PURE__*/function (_React$Component) {
     _classCallCheck(this, Application);
 
     _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "onCountryClick", function (country) {
+      _this.setState({
+        currentCountry: country
+      });
+    });
+
     _this.state = {
-      allCountries: []
+      allCountries: [],
+      currentCountry: null
     };
     return _this;
   }
@@ -47791,9 +47834,12 @@ var Application = /*#__PURE__*/function (_React$Component) {
   _createClass(Application, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement(_CustomMap.CustomMap, {
+      return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_CustomMap.CustomMap, {
+        onCountryClick: this.onCountryClick,
         allCountries: this.state.allCountries
-      });
+      }), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
+        currentCountry: this.state.currentCountry
+      }));
     }
   }, {
     key: "componentDidMount",
@@ -47812,7 +47858,7 @@ var Application = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.Application = Application;
-},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","./CustomMap":"../src/CustomMap/index.js"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","./CustomMap":"../src/CustomMap/index.js","./Infos":"../src/Infos/index.js"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
