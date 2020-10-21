@@ -51809,13 +51809,13 @@ var Home = function Home(props) {
 };
 
 exports.Home = Home;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../CustomMap":"../src/CustomMap/index.js","../Infos":"../src/Infos/index.js"}],"../src/pages/Todo.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../CustomMap":"../src/CustomMap/index.js","../Infos":"../src/Infos/index.js"}],"../src/pages/ToDo.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Todo = void 0;
+exports.ToDo = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -51823,13 +51823,13 @@ var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Todo = function Todo(props) {
+var ToDo = function ToDo(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/Home"
-  }, "Retour vers la home"), /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "liste des todos"));
+    to: "/"
+  }, "Retour vers la home"), " ", /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "liste des todos "));
 };
 
-exports.Todo = Todo;
+exports.ToDo = ToDo;
 },{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../src/Application.js":[function(require,module,exports) {
 "use strict";
 
@@ -51846,7 +51846,7 @@ var _reactRouterDom = require("react-router-dom");
 
 var _Home = require("./pages/Home");
 
-var _Todo = require("./pages/Todo");
+var _ToDo = require("./pages/ToDo");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51910,9 +51910,12 @@ var Application = /*#__PURE__*/function (_React$Component) {
         allCountries: this.state.allCountries,
         currentCountry: this.state.currentCountry
       })), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+        render: function render(props) {
+          return /*#__PURE__*/_react.default.createElement(_ToDo.ToDo, props);
+        },
         exact: true,
-        path: "/Todo"
-      }, /*#__PURE__*/_react.default.createElement(_Todo.Todo, null))));
+        path: "/todo"
+      })));
     }
   }, {
     key: "componentDidMount",
@@ -51931,7 +51934,7 @@ var Application = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.Application = Application;
-},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/Todo":"../src/pages/Todo.js"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/ToDo":"../src/pages/ToDo.js"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
