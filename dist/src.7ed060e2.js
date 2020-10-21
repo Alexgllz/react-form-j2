@@ -51824,7 +51824,10 @@ var Home = function Home(props) {
   }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
     className: "btn btn-primary",
     to: "/todo"
-  }, "Voir la liste des todos")), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
+  }, "Voir la liste des todos"), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    className: "btn btn-primary",
+    to: "/Persistent"
+  }, "Voir persistent")), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
     currentCountry: props.currentCountry
   }));
 };
@@ -51979,7 +51982,43 @@ var ToDoClassVersion = /*#__PURE__*/function (_React$Component) {
 
 exports.ToDoClassVersion = ToDoClassVersion;
 ;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../src/Application.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../src/pages/Persistent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Persistent = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Persistent = function Persistent() {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Persistent  data"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    className: "btn btn-primary",
+    to: "/"
+  }, "Retour vers la home"));
+};
+
+exports.Persistent = Persistent;
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../src/data/db.js":[function(require,module,exports) {
+/* import Dexie from 'dexie';
+
+const db = new Dexie('ToDoDataBase');
+
+	// Declare tables, IDs and indexes
+	db.version(1).stores({
+		friends: '++id'
+	});
+    await db.todos.add({
+		created: Date.now(),
+		done: false,
+		desc: 'East 13:th Street'
+	}); */
+},{}],"../src/Application.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51996,6 +52035,10 @@ var _reactRouterDom = require("react-router-dom");
 var _Home = require("./pages/Home");
 
 var _ToDoClassVersion = require("./pages/ToDoClassVersion");
+
+var _Persistent = require("./pages/Persistent");
+
+require("./data/db");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52064,6 +52107,12 @@ var Application = /*#__PURE__*/function (_React$Component) {
         },
         exact: true,
         path: "/todo"
+      }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+        render: function render(props) {
+          return /*#__PURE__*/_react.default.createElement(_Persistent.Persistent, props);
+        },
+        exact: true,
+        path: "/Persistent"
       })));
     }
   }, {
@@ -52083,7 +52132,7 @@ var Application = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.Application = Application;
-},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/ToDoClassVersion":"../src/pages/ToDoClassVersion.js"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/ToDoClassVersion":"../src/pages/ToDoClassVersion.js","./pages/Persistent":"../src/pages/Persistent.js","./data/db":"../src/data/db.js"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
