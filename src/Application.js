@@ -1,6 +1,6 @@
 import React from 'react';
 import { Services } from './http-services';
-import { Switch, Route, BrowserRouter, Link } from 'react-router-dom';
+import { Switch, Route, BrowserRouter} from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Todo } from './pages/Todo';
 
@@ -26,7 +26,7 @@ export class Application extends React.Component {
                         allCountries={this.state.allCountries}
                         currentCountry={this.state.currentCountry} />
                 </Route>
-                <Route exact path="/todo">
+                <Route exact path="/Todo">
                     <Todo />
                 </Route>
             </Switch>
