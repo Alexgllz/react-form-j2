@@ -30579,6 +30579,23 @@ var instance = _axios.default.create({
 });
 
 exports.instance = instance;
+},{"axios":"../node_modules/axios/index.js"}],"../src/http-services/instancePosts.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.instancePosts = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var instancePosts = _axios.default.create({
+  baseURL: "https://effy-simple-api.herokuapp.com"
+});
+
+exports.instancePosts = instancePosts;
 },{"axios":"../node_modules/axios/index.js"}],"../src/http-services/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -30589,13 +30606,18 @@ exports.Services = void 0;
 
 var _instance = require("./instance");
 
+var _instancePosts = require("./instancePosts");
+
 var Services = {
   getAllCountries: function getAllCountries() {
     return _instance.instance.get('/all');
+  },
+  getAllPosts: function getAllPosts() {
+    return _instancePosts.instancePosts.get('/posts');
   }
 };
 exports.Services = Services;
-},{"./instance":"../src/http-services/instance.js"}],"../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
+},{"./instance":"../src/http-services/instance.js","./instancePosts":"../src/http-services/instancePosts.js"}],"../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51827,7 +51849,7 @@ var Home = function Home(props) {
   }, "Voir la liste des todos")), /*#__PURE__*/_react.default.createElement("div", {
     className: "m-2 text-center"
   }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    className: "btn btn-primary m-2",
+    className: "btn btn-primary",
     to: "/Posts"
   }, "Voir les posts")), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
     currentCountry: props.currentCountry
@@ -57119,13 +57141,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Posts = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Posts = function Posts() {
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("p", null, "posts"), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
@@ -57256,7 +57276,9 @@ var Application = /*#__PURE__*/function (_React$Component) {
 
     _this.state = {
       allCountries: [],
-      currentCountry: null
+      currentCountry: null,
+      allPosts: [],
+      currentPosts: []
     };
     return _this;
   }
@@ -57264,6 +57286,8 @@ var Application = /*#__PURE__*/function (_React$Component) {
   _createClass(Application, [{
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/"
@@ -57285,7 +57309,10 @@ var Application = /*#__PURE__*/function (_React$Component) {
         path: "/persistent"
       }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
         render: function render(props) {
-          return /*#__PURE__*/_react.default.createElement(_Posts.Posts, props);
+          return /*#__PURE__*/_react.default.createElement(_Posts.Posts, {
+            allPosts: _this2.state.allPosts,
+            currentPosts: _this2.state.currentPosts
+          });
         },
         exact: true,
         path: "/Posts"
@@ -57294,12 +57321,20 @@ var Application = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       _httpServices.Services.getAllCountries().then(function (results) {
-        _this2.setState({
+        _this3.setState({
           allCountries: results.data
         });
+      });
+
+      _httpServices.Services.getAllPosts().then(function (resultsPosts) {
+        _this3.setState({
+          allPosts: resultsPosts.data
+        });
+
+        console.table(resultsPosts.data);
       });
     }
   }]);

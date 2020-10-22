@@ -12,7 +12,9 @@ export class Application extends React.Component {
         super(props);
         this.state = {
             allCountries: [],
-            currentCountry: null
+            currentCountry: null,
+            allPosts: [],
+            currentPosts: []
         };
     }
     onCountryClick = (country) => {
@@ -31,7 +33,13 @@ export class Application extends React.Component {
                 </Route>
                 <Route render={props => <ToDo  {...props} />} exact path="/todo" />
                 <Route render={props => <Persistent  {...props} />} exact path="/persistent" />
-                <Route render={props => <Posts  {...props} />} exact path="/Posts" />
+                <Route 
+                    render={props => 
+                        <Posts  
+                            allPosts={this.state.allPosts}
+                            currentPosts={this.state.currentPosts} 
+                        />} 
+                        exact path="/Posts" />
             </Switch>
         </BrowserRouter>
     }
@@ -40,6 +48,13 @@ export class Application extends React.Component {
             this.setState({
                 allCountries: results.data
             });
+        });
+        Services.getAllPosts().then((resultsPosts) =>{
+            this.setState({
+                allPosts: resultsPosts.data
+                
+            });
+            console.table(resultsPosts.data)
         });
     }
 }
