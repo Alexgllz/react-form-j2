@@ -65,4 +65,4 @@ export class ToDoClassVersion extends React.Component {
             </Link>
         </div>
     }
-};
+}

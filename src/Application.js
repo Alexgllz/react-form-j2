@@ -2,7 +2,7 @@ import React from 'react';
 import { Services } from './http-services';
 import { Switch, Route, BrowserRouter, Link } from 'react-router-dom';
 import { Home } from './pages/Home';
-import { ToDoClassVersion } from './pages/ToDoClassVersion';
+import { ToDo } from './pages/ToDo';
 import { Persistent } from './pages/Persistent';
 import './data/db';
 
@@ -28,8 +28,8 @@ export class Application extends React.Component {
                         allCountries={this.state.allCountries}
                         currentCountry={this.state.currentCountry} />
                 </Route>
-                <Route render={props => <ToDoClassVersion  {...props} />} exact path="/todo" />
-                <Route render={props => <Persistent  {...props} />} exact path="/Persistent" />
+                <Route render={props => <ToDo  {...props} />} exact path="/todo" />
+                <Route render={props => <Persistent  {...props} />} exact path="/persistent" />
             </Switch>
         </BrowserRouter>
     }
