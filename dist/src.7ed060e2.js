@@ -51824,7 +51824,12 @@ var Home = function Home(props) {
   }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
     className: "btn btn-primary",
     to: "/todo"
-  }, "Voir la liste des todos")), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
+  }, "Voir la liste des todos")), /*#__PURE__*/_react.default.createElement("div", {
+    className: "m-2 text-center"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    className: "btn btn-primary m-2",
+    to: "/Posts"
+  }, "Voir les posts")), /*#__PURE__*/_react.default.createElement(_Infos.Infos, {
     currentCountry: props.currentCountry
   }));
 };
@@ -57004,14 +57009,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -57033,46 +57030,65 @@ var ToDo = function ToDo() {
   var _useState3 = (0, _react.useState)(""),
       _useState4 = _slicedToArray(_useState3, 2),
       currentTodoDescription = _useState4[0],
-      updateCurrentTodoDescription = _useState4[1];
+      updateCurrentTodoDescription = _useState4[1]; //componentDidMount like
+
+
+  (0, _react.useEffect)(function () {
+    updateList();
+  }, []);
 
   var addTodo = function addTodo() {
-    var tabCopy = _toConsumableArray(todoList);
-
     var newToDo = {
       created: Date.now(),
       done: false,
       desc: currentTodoDescription
     };
-    tabCopy.push(newToDo);
-    updateToDoList(tabCopy);
 
-    _db.default.todos.add(newToDo);
+    _db.default.todos.add(newToDo).then(function () {
+      return updateList();
+    });
   };
 
   var onTextInputChange = function onTextInputChange(element) {
     updateCurrentTodoDescription(element.target.value);
   };
 
-  var onToDoChange = function onToDoChange(domElement, toDo) {
-    var indexOfTodo = todoList.indexOf(toDo);
-
-    var tabCopy = _toConsumableArray(todoList);
-
-    tabCopy[indexOfTodo].done = domElement.target.checked;
-    updateToDoList(tabCopy);
+  var updateList = function updateList() {
+    return _db.default.todos.toArray().then(function (results) {
+      return updateToDoList(results);
+    });
   };
 
+  var onToDoChange = function onToDoChange(domElement, toDo) {
+    toDo.done = domElement.target.checked;
+
+    _db.default.todos.put(toDo).then(function () {
+      return updateList();
+    });
+  };
+
+  var todosFilteredArray = todoList.filter(function (todo) {
+    return todo.done === false;
+  });
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "input-group my-3"
   }, /*#__PURE__*/_react.default.createElement("input", {
     onChange: onTextInputChange,
-    placeholder: "indiquez la description de votre tâche",
-    type: "text"
-  }), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("p", null, JSON.stringify(todoList)), /*#__PURE__*/_react.default.createElement("form", {
+    type: "text",
+    className: "form-control",
+    placeholder: "indiquez la description de votre t\xE2che"
+  }), /*#__PURE__*/_react.default.createElement("button", {
+    disabled: currentTodoDescription.length == 0 ? true : false,
+    onClick: addTodo,
+    className: "btn btn-outline-secondary",
+    type: "button"
+  }, "Ajout d'une tache")), /*#__PURE__*/_react.default.createElement("form", {
     className: "mb-3"
   }, /*#__PURE__*/_react.default.createElement("ul", {
     className: "list-group"
-  }, todoList.map(function (todo, index) {
+  }, todosFilteredArray.map(function (todo, index) {
     return /*#__PURE__*/_react.default.createElement("li", {
       key: index,
       className: "list-group-item"
@@ -57088,20 +57104,35 @@ var ToDo = function ToDo() {
       type: "checkbox",
       value: todo.done
     }), todo.desc)));
-  }))), /*#__PURE__*/_react.default.createElement("button", {
-    disabled: currentTodoDescription.length == 0 ? true : false,
-    onClick: addTodo
-  }, "Ajout d'une tache"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+  }))), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
     className: "btn btn-primary",
     to: "/"
-  }, "Retour vers la home"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    className: "btn btn-primary",
-    to: "/Persistent"
-  }, "Aller vers persistent"), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Persistent data"), /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, JSON.stringify(setTodo.todos))));
+  }, "Retour vers la home"));
 };
 
 exports.ToDo = ToDo;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../data/db":"../src/data/db.js"}],"../src/pages/Persistent.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","../data/db":"../src/data/db.js"}],"../src/pages/Posts.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Posts = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var Posts = function Posts() {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("p", null, "posts"));
+};
+
+exports.Posts = Posts;
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../src/pages/Persistent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57169,6 +57200,8 @@ var _reactRouterDom = require("react-router-dom");
 var _Home = require("./pages/Home");
 
 var _ToDo = require("./pages/ToDo");
+
+var _Posts = require("./pages/Posts");
 
 var _Persistent = require("./pages/Persistent");
 
@@ -57247,6 +57280,12 @@ var Application = /*#__PURE__*/function (_React$Component) {
         },
         exact: true,
         path: "/persistent"
+      }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+        render: function render(props) {
+          return /*#__PURE__*/_react.default.createElement(_Posts.Posts, props);
+        },
+        exact: true,
+        path: "/Posts"
       })));
     }
   }, {
@@ -57266,7 +57305,7 @@ var Application = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.Application = Application;
-},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/ToDo":"../src/pages/ToDo.js","./pages/Persistent":"../src/pages/Persistent.js","./data/db":"../src/data/db.js"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./http-services":"../src/http-services/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/Home":"../src/pages/Home.js","./pages/ToDo":"../src/pages/ToDo.js","./pages/Posts":"../src/pages/Posts.js","./pages/Persistent":"../src/pages/Persistent.js","./data/db":"../src/data/db.js"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -57310,7 +57349,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54539" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62632" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
