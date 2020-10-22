@@ -6,6 +6,10 @@ import { ToDo } from './pages/ToDo';
 import { Posts } from './pages/Posts';
 import { Persistent } from './pages/Persistent';
 import './data/db';
+import { Infos } from './Infos';
+import {InfosPosts} from './Infos';
+
+//TODO changer les states: récupére allCountries et allPosts
 
 export class Application extends React.Component {
     constructor(props) {
@@ -14,7 +18,7 @@ export class Application extends React.Component {
             allCountries: [],
             currentCountry: null,
             allPosts: [],
-            currentPosts: []
+            currentPosts: null
         };
     }
     onCountryClick = (country) => {
@@ -40,6 +44,7 @@ export class Application extends React.Component {
                             currentPosts={this.state.currentPosts} 
                         />} 
                         exact path="/Posts" />
+                        {/* <InfosPosts currentPosts={this.state.currentPosts}/> */}
             </Switch>
         </BrowserRouter>
     }
